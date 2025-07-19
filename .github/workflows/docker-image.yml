@@ -63,6 +63,7 @@ jobs:
           curl -fsSL https://railway.app/install.sh | sh
           echo "$HOME/.railway/bin" >> $GITHUB_PATH
 
+
       - name: Trigger Railway deploy
         run: |
           railway link -p 55c25933-c404-41eb-8639-a1191285aa42 -s inventario_GPS
