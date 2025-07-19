@@ -1,8 +1,9 @@
+// app.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const { sequelize } = require('./models'); 
+const { sequelize } = require('./models');
 
 dotenv.config();
 
@@ -10,22 +11,6 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-
-sequelize.authenticate()
-    .then(() => {
-        console.log('✅ Conexión con PostgreSQL establecida exitosamente');
-        return sequelize.sync({ alter: true });
-    })
-    .then(() => {
-        console.log('📦 Modelos sincronizados con la base de datos');
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
-        });
-    })
-    .catch(err => {
-        console.error('❌ Error al conectar con la base de datos:', err);
-    });
 
 // Rutas
 const productoRoutes = require('./routes/product.routes');
@@ -40,3 +25,25 @@ app.use('/api/lotes', lotRoutes);
 app.get('/hola', (req, res) => {
     res.json({ mensaje: 'Hola mundo' });
 });
+
+// Si no es entorno de test, conectarse a DB y levantar servidor
+if (process.env.NODE_ENV !== 'test') {
+    sequelize.authenticate()
+        .then(() => {
+            console.log('✅ Conexión con PostgreSQL establecida exitosamente');
+            return sequelize.sync({ alter: true });
+        })
+        .then(() => {
+            console.log('📦 Modelos sincronizados con la base de datos');
+            const PORT = process.env.PORT || 3000;
+            app.listen(PORT, () => {
+                console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+            });
+        })
+        .catch(err => {
+            console.error('❌ Error al conectar con la base de datos:', err);
+        });
+}
+
+// ✅ Exporta la instancia de Express
+module.exports = app;
