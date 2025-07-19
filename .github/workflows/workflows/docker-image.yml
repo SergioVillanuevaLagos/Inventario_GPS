@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/inventario_GPS
+  IMAGE_NAME: ${{ github.repository }}/Inventario_GPS
 
 jobs:
   build-test-and-push:
