@@ -67,4 +67,4 @@ jobs:
         env:
           RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
         run: |
-          railway up --service inventario_GPS --project 55c25933-c404-41eb-8639-a1191285aa42 --ci
+          railway up-- ci -- --service inventario_GPS --project 55c25933-c404-41eb-8639-a1191285aa42 --ci
