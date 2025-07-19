@@ -1,16 +1,19 @@
 const request = require('supertest');
 const app = require('../app');
 
-
 describe('API Bodegas', () => {
     let id;
 
     it('POST /api/bodegas crea una bodega', async () => {
         const res = await request(app).post('/api/bodegas').send({
-            name: 'Bodega Central'
+            nombre: 'Bodega Central',
+            ubicacion: 'Centro',
+            personid: 1
         });
+
         expect(res.statusCode).toBe(201);
-        id = res.body.id;
+        expect(res.body.nombre).toBe('Bodega Central');
+        id = res.body.storageid;
     });
 
     it('GET /api/bodegas devuelve lista', async () => {
@@ -21,10 +24,13 @@ describe('API Bodegas', () => {
 
     it('PUT /api/bodegas/:id actualiza bodega', async () => {
         const res = await request(app).put(`/api/bodegas/${id}`).send({
-            name: 'Bodega Principal'
+            nombre: 'Bodega Actualizada',
+            ubicacion: 'Sur',
+            personid: 2
         });
+
         expect(res.statusCode).toBe(200);
-        expect(res.body.name).toBe('Bodega Principal');
+        expect(res.body.nombre).toBe('Bodega Actualizada');
     });
 
     it('DELETE /api/bodegas/:id elimina bodega', async () => {
