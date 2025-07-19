@@ -19,5 +19,6 @@ module.exports = (sequelize) => {
     }, {
         tableName: 'storage',
         timestamps: false
+        
     });
 };
