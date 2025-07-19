@@ -10,18 +10,31 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Importar modelos
+// Importar modelos y conexión
 const db = require('./models');
 const sequelize = db.sequelize;
 
-// Rutas (ejemplo)
+// Verificar conexión con la base de datos
+sequelize.authenticate()
+    .then(() => {
+        console.log('✅ Conexión con PostgreSQL establecida exitosamente');
+
+        // Sincronizar modelos con la base de datos
+        return sequelize.sync(); // O usa { force: true } solo si deseas resetear las tablas
+    })
+    .then(() => {
+        console.log('📦 Base de datos sincronizada');
+
+        // Iniciar servidor
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('❌ No se pudo conectar a la base de datos:', err);
+    });
+
+// Rutas
 const productoRoutes = require('./routes/product.routes');
 app.use('/api/productos', productoRoutes);
-
-// Conectar y levantar servidor
-sequelize.sync().then(() => {
-    console.log('📦 Base de datos sincronizada');
-    app.listen(process.env.PORT || 3000, () => {
-        console.log(`🚀 Servidor corriendo en puerto ${process.env.PORT || 3000}`);
-    });
-});
