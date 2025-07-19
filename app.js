@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const { sequelize } = require('./models'); 
 
 dotenv.config();
 
@@ -10,31 +11,32 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Importar modelos y conexión
-const db = require('./models');
-const sequelize = db.sequelize;
-
-// Verificar conexión con la base de datos
 sequelize.authenticate()
     .then(() => {
         console.log('✅ Conexión con PostgreSQL establecida exitosamente');
-
-        // Sincronizar modelos con la base de datos
-        return sequelize.sync(); // O usa { force: true } solo si deseas resetear las tablas
+        return sequelize.sync({ alter: true });
     })
     .then(() => {
-        console.log('📦 Base de datos sincronizada');
-
-        // Iniciar servidor
+        console.log('📦 Modelos sincronizados con la base de datos');
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {
             console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
         });
     })
     .catch(err => {
-        console.error('❌ No se pudo conectar a la base de datos por :', err);
+        console.error('❌ Error al conectar con la base de datos:', err);
     });
 
 // Rutas
 const productoRoutes = require('./routes/product.routes');
+const storageRoutes = require('./routes/storage.routes');
+const lotRoutes = require('./routes/lot.routes');
+
 app.use('/api/productos', productoRoutes);
+app.use('/api/bodegas', storageRoutes);
+app.use('/api/lotes', lotRoutes);
+
+// Ruta de prueba
+app.get('/hola', (req, res) => {
+    res.json({ mensaje: 'Hola mundo' });
+});
