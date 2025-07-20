@@ -26,6 +26,7 @@ router.get('/:id', async (req, res) => {
 // Crear nueva bodega
 router.post('/', async (req, res) => {
     try {
+        if (req.body.personid) req.body.personid = String(req.body.personid);
         const newStorage = await Storage.create(req.body);
         res.status(201).json(newStorage);
     } catch (error) {
@@ -36,6 +37,7 @@ router.post('/', async (req, res) => {
 // Actualizar bodega por id
 router.put('/:id', async (req, res) => {
     try {
+        if (req.body.personid) req.body.personid = String(req.body.personid);
         const storage = await Storage.findByPk(req.params.id);
         if (!storage) return res.status(404).json({ error: 'Bodega no encontrada' });
 
@@ -70,7 +72,7 @@ router.get('/:id/lotes', async (req, res) => {
         }
 
         const lots = await Lot.findAll({
-            where: { storageid: id }, // clave foreignKey en minúscula
+            where: { storageid: id }, // foreign key en minúscula
             include: [{
                 model: Product,
                 as: 'product' // alias definido en la asociación
@@ -78,7 +80,7 @@ router.get('/:id/lotes', async (req, res) => {
         });
 
         res.json({
-            bodega: storage.name,
+            bodega: storage.nombre,
             total_lotes: lots.length,
             detalle: lots
         });
@@ -106,7 +108,7 @@ router.get('/:id/inventario', async (req, res) => {
         });
 
         if (lots.length === 0) {
-            return res.json({ bodega: storage.name, inventario: [] });
+            return res.json({ bodega: storage.nombre, inventario: [] });
         }
 
         const inventario = {};
@@ -128,15 +130,15 @@ router.get('/:id/inventario', async (req, res) => {
 
             inventario[prodId].totalCantidad += lot.quantity;
             inventario[prodId].lotes.push({
-                loteId: lot.id,
+                loteId: lot.lotid,
                 cantidad: lot.quantity,
-                fechaVencimiento: lot.expirationDate || null, // si existe este campo
-                estado: lot.status || null // si existe este campo
+                fechaVencimiento: lot.expirationdate || null,
+                estado: lot.status || null // si tienes este campo, si no, puedes eliminarlo
             });
         });
 
         res.json({
-            bodega: storage.name,
+            bodega: storage.nombre,
             inventario: Object.values(inventario)
         });
 
@@ -144,6 +146,5 @@ router.get('/:id/inventario', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
 
 module.exports = router;
