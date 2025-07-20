@@ -14,7 +14,11 @@ module.exports = (sequelize) => {
         ubicacion: DataTypes.STRING,
         personid: {
             type: DataTypes.STRING, 
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'persons', // nombre de la tabla referenciada
+                key: 'rut'   // clave primaria de la tabla referenciada
+            }
         }
     }, {
         tableName: 'storage',
