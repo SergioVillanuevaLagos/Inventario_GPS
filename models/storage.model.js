@@ -8,21 +8,24 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         nombre: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(255),
             allowNull: false
         },
-        ubicacion: DataTypes.STRING,
+        ubicacion: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
         personid: {
-            type: DataTypes.STRING, 
+            type: DataTypes.STRING(255), 
             allowNull: false,
             references: {
-                model: 'persons', // nombre de la tabla referenciada
-                key: 'rut'   // clave primaria de la tabla referenciada
+                model: 'persons',
+                key: 'rut'
             }
         }
     }, {
         tableName: 'storage',
-        timestamps: false
-        
+        timestamps: false,
+        freezeTableName: true
     });
 };
