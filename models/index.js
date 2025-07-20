@@ -1,6 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const dbConfig = require('../config/db.config'); // ajusta la ruta si es necesario
-const logger = require('../utils/logger');
 
 const sequelize = new Sequelize(
     dbConfig.DB,
@@ -28,24 +27,12 @@ if (process.env.NODE_ENV !== 'test') {
     Lot.belongsTo(Storage, { foreignKey: 'storageid', as: 'storage' });
 }
 
-// Función para conectar a la base de datos
-const connectDB = async () => {
-    try {
-        await sequelize.authenticate();
-        logger.info('PostgreSQL Conectado');
-        await sequelize.sync();
-        logger.info('Tablas de la base de datos sincronizadas');
-        return sequelize;
-    } catch (error) {
-        logger.error(`Error al conectar a PostgreSQL: ${error.message}`);
-        process.exit(1);
-    }
-};
-
 module.exports = {
     sequelize,
-    connectDB,
     Product,
     Storage,
     Lot,
 };
+
+
+
