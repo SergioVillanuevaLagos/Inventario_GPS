@@ -29,6 +29,8 @@ const dbConfig = {
     dialectOptions: {} // vacío porque no usas SSL
 };
 
+
+
 module.exports = dbConfig;
 
 
