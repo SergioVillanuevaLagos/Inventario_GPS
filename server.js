@@ -31,7 +31,11 @@ if (process.env.NODE_ENV !== 'test') {
     sequelize.authenticate()
         .then(() => {
             console.log('✅ Conexión con PostgreSQL establecida exitosamente');
-            return sequelize.sync({ alter: true });
+            // Use different sync strategies based on environment
+            const syncOptions = process.env.NODE_ENV === 'development' 
+                ? { alter: true }  // Allow alterations in development
+                : { force: false, alter: false }; // Don't alter schema in production
+            return sequelize.sync(syncOptions);
         })
         .then(() => {
             console.log('📦 Modelos sincronizados con la base de datos');
