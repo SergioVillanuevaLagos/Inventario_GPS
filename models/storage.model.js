@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
         },
         ubicacion: DataTypes.STRING,
         personid: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING, 
             allowNull: false
         }
     }, {

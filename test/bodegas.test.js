@@ -1,6 +1,7 @@
 // test/storage.test.js
 const request = require('supertest');
 const express = require('express');
+const { Op } = require('sequelize');
 
 jest.mock('../models/storage.model.js', () => {
     return (sequelize, DataTypes) => {
