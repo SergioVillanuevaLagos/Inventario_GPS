@@ -16,7 +16,7 @@ const dbConfig = {
         idle: 10000,
     },
 
-    logging: false, // Cambia a `console.log` si estás en desarrollo
+    logging: false, // Cambia a console.log si estás en desarrollo
 
     timezone: '-04:00', // Puedes ajustar a tu zona horaria (por ejemplo Chile)
 
@@ -30,3 +30,6 @@ const dbConfig = {
 };
 
 module.exports = dbConfig;
+
+
+
