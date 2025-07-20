@@ -37,7 +37,7 @@ describe('Storage API', () => {
     it('POST /api/bodegas crea bodega', async () => {
         const res = await request(app)
             .post('/api/bodegas')
-            .send({ nombre: 'Test Bodega', personid: 1 });
+            .send({ nombre: 'Test Bodega', personid: '11.111.111-1' });
 
         expect(res.statusCode).toBe(201);
         expect(res.body.nombre).toBe('Test Bodega');
